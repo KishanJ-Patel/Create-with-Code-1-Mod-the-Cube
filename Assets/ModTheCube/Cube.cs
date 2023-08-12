@@ -5,7 +5,12 @@ using UnityEngine;
 public class Cube : MonoBehaviour
 {
     public MeshRenderer Renderer;
-    
+
+    [SerializeField] private float posZRange = 4f;
+    [SerializeField] private float speedZAxis = 1f;
+
+    private bool moveForward = false;
+
     void Start()
     {
         transform.position = new Vector3(3, 4, 1);
@@ -19,5 +24,12 @@ public class Cube : MonoBehaviour
     void Update()
     {
         transform.Rotate(10.0f * Time.deltaTime, 0.0f, 0.0f);
+
+        if (!moveForward ) transform.Translate(Vector3.back * speedZAxis * Time.deltaTime, Space.World);
+        else transform.Translate(Vector3.forward * speedZAxis * Time.deltaTime, Space.World);
+
+        if (transform.position.z <= -posZRange) moveForward = true;
+        else if (transform.position.z >= posZRange) moveForward = false;
+
     }
 }
