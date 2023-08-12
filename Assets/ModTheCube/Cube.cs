@@ -13,24 +13,46 @@ public class Cube : MonoBehaviour
     [SerializeField] private Vector3 maxScaleLimit = Vector3.one * 1.5f;
     [SerializeField] private float scaleRate = 0.5f;
 
+    [SerializeField] private float rotSpeed = 15f;
+    
     private bool moveForward = false;
     private bool scaleUp = false;
     private Vector3 newScale;
 
+    private int randNum;
+    private float timeCount = 0;
     void Start()
     {
-        Material material = Renderer.material;
-        
-        material.color = new Color(0.5f, 1.0f, 0.3f, 0.4f);
+        randNum = Random.Range(0, 4);
     }
-    
+
     void Update()
     {
-        transform.Rotate(10.0f * Time.deltaTime, 0.0f, 0.0f);
+        switch (randNum)
+        {
+            case 1:
+                ChangeRotation();
+                break;
+            case 2: 
+                MoveAlongZAxis(); 
+                break;
+            case 3:
+                ChangeScale();
+                break;
+        }
 
-        MoveAlongZAxis();
+        if (timeCount >= 1f)
+        {
+            ChangeColor();
+            timeCount = 0f;
+        }
 
-        ChangeScale();
+        timeCount += Time.deltaTime;
+    }
+
+    private void ChangeRotation()
+    {
+        transform.Rotate(0.0f, rotSpeed * Time.deltaTime, 0.0f);
     }
 
     private void MoveAlongZAxis()
@@ -79,5 +101,12 @@ public class Cube : MonoBehaviour
         {
             scaleUp = false;
         }
+    }
+
+    private void ChangeColor()
+    {
+        Material material = Renderer.material;
+
+        material.color = new Color(Random.Range(0, 1f), 0.1f, 0.4f, 0.3f);
     }
 }
